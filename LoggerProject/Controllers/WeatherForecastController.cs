@@ -19,11 +19,11 @@ namespace LoggerProject.Controllers
             public WeatherForecastController(ILogger<WeatherForecastController> logger)
             {
                 _logger = logger;
-            _logger.LogTrace("Logging Trace Message");
+            /*_logger.LogTrace("Logging Trace Message");
             _logger.LogDebug("Logging Debug Message");
             _logger.LogInformation("Logging Information Message");
             _logger.LogWarning("Logging Warning Message");
-            _logger.LogError("Logging Error Message");
+            _logger.LogError("Logging Error Message");*/
            // _logger.LogCritical("Logging Critical Message");
 
         }
@@ -31,18 +31,34 @@ namespace LoggerProject.Controllers
         [HttpGet]
             [Route("WeatherForecast")]
             //[MySampleActionFilter("Action")]
-            public string Get()
+            public IEnumerable<WeatherForecast> Get()
             {
-                var rng = new Random();
+            var iteracion = 1;
 
+            _logger.LogDebug($"Debug {iteracion}");
+            _logger.LogInformation($"Information {iteracion}");
+            _logger.LogWarning($"Warning {iteracion}");
+            _logger.LogError($"Error {iteracion}");
+            _logger.LogCritical($"Critical {iteracion}");
 
-                //Date = DateTime.Now.AddDays();
-                /*int TemperatureC = rng.Next(-20, 55);
-                return TemperatureC;*/
-                string Summary = Summaries[rng.Next(Summaries.Length)];
-                return Summary;
-                //}).ToArray();
+            try
+            {
+                throw new NotImplementedException();
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            var rng = new Random();
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = rng.Next(-20, 55),
+                Summary = Summaries[rng.Next(Summaries.Length)]
+            })
+             .ToArray();
+        }
 
             /* public IActionResult About()
              {
