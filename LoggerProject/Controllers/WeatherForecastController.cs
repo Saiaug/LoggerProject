@@ -1,71 +1,60 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace LoggerProject.Controllers
 {
-    
-        [ApiController]
-        [Route("api/[controller]")]
-        //[MySampleActionFilter("Weather")]
-        public class WeatherForecastController : ControllerBase
 
+    [ApiController]
+    [Route("api/[controller]")]
+    //[MySampleActionFilter("Weather")]
+    public class WeatherForecastController : ControllerBase
+
+    {
+        private static readonly string[] Summaries = new[]
         {
-            private static readonly string[] Summaries = new[]
-            {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
             };
 
-            private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<WeatherForecastController> _logger;
 
-            public WeatherForecastController(ILogger<WeatherForecastController> logger)
-            {
-                _logger = logger;
-            /*_logger.LogTrace("Logging Trace Message");
-            _logger.LogDebug("Logging Debug Message");
-            _logger.LogInformation("Logging Information Message");
-            _logger.LogWarning("Logging Warning Message");
-            _logger.LogError("Logging Error Message");*/
-           // _logger.LogCritical("Logging Critical Message");
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        {
+            _logger = logger;
+
 
         }
 
-        [HttpGet]
-            [Route("WeatherForecast")]
-            //[MySampleActionFilter("Action")]
-            public IEnumerable<WeatherForecast> Get()
-            {
-            var iteracion = 1;
 
-            _logger.LogDebug($"Debug {iteracion}");
-            _logger.LogInformation($"Information {iteracion}");
-            _logger.LogWarning($"Warning {iteracion}");
-            _logger.LogError($"Error {iteracion}");
-            _logger.LogCritical($"Critical {iteracion}");
-
-            try
+        [HttpPost]
+        [Route("WeatherForecast")]
+        //[MySampleActionFilter("Action")]
+        public string Loglevel(string msg, LogLevel logLevel)
+        {
+            if (logLevel == LogLevel.Debug)
             {
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogDebug("Debug");
+                return msg;
             }
 
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            if (logLevel == LogLevel.Warning)
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-             .ToArray();
+                _logger.LogWarning($"Warning");
+                return msg;
+            }
+
+            if (logLevel == LogLevel.Error)
+            {
+                _logger.LogError($"Error");
+                return msg;
+            }
+
+            return msg;
+
         }
 
-            /* public IActionResult About()
-             {
-                 _logger.LogInformation("Log message in the About() method");
+    }
 
-                 return View();
-             }*/
-        }
+           
+        
     
 }
