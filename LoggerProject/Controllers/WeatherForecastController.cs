@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 
 namespace LoggerProject.Controllers
@@ -10,10 +11,7 @@ namespace LoggerProject.Controllers
     public class WeatherForecastController : ControllerBase
 
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-            };
+       
 
         private readonly ILogger<WeatherForecastController> _logger;
 
@@ -30,25 +28,22 @@ namespace LoggerProject.Controllers
         //[MySampleActionFilter("Action")]
         public string Loglevel(string msg, LogLevel logLevel)
         {
-            if (logLevel == LogLevel.Debug)
-            {
-                _logger.LogDebug("Debug");
-                return msg;
-            }
+          
+            _logger.Log(logLevel, $" This message is {logLevel}");
 
-            if (logLevel == LogLevel.Warning)
+            if (_logger.IsEnabled(logLevel))
             {
-                _logger.LogWarning($"Warning");
-                return msg;
-            }
 
-            if (logLevel == LogLevel.Error)
-            {
-                _logger.LogError($"Error");
-                return msg;
+                //  _logger.Log(logLevel, $" This message is {logLevel}");
+                Console.WriteLine( $"current loglevel is {logLevel} and log is printed");
+               
             }
+            else
+              
 
+               Console.WriteLine($"current loglevel is {logLevel} and log is not printed");
             return msg;
+            
 
         }
 

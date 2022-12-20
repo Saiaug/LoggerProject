@@ -2,7 +2,7 @@ using LoggerProject.Controllers;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.AddFilter((provider, category, logLevel) =>
+/*builder.Logging.AddFilter((provider, category, logLevel) =>
 {
     if (provider.Contains("ConsoleLoggerProvider")
         && category.Contains("Controller")
@@ -20,7 +20,7 @@ builder.Logging.AddFilter((provider, category, logLevel) =>
     {
         return false;
     }
-});
+});*/
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
